@@ -3,17 +3,19 @@ from tensorflow import keras
 import cv2
 import numpy as np
 
+
 class NeuralNetwork(object):
 
     def __init__(self):
         self.model = None
-    
+
     def createModel(self):
         """Create and compile the keras model. See layers-18pct.cfg and 
            layers-params-18pct.cfg for the network model, 
            and https://code.google.com/archive/p/cuda-convnet/wikis/LayerParams.wiki 
            for documentation on the layer format.
         """
+        # -- First -- #
         self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='valid',
                                            input_shape=(128, 128, 3), data_format="channels_last", dilation_rate=(1, 1),
                                            activation=None, use_bias=True, kernel_initializer='glorot_uniform',
@@ -25,6 +27,8 @@ class NeuralNetwork(object):
                                         moving_mean_initializer='zeros', moving_variance_initializer='ones',
                                         beta_regularizer=None, gamma_regularizer=None, beta_constraint=None,
                                         gamma_constraint=None)
+
+        # -- Second -- #
         self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='valid', data_format=None,
                                            dilation_rate=(1, 1), activation=None, use_bias=True,
                                            kernel_initializer='glorot_uniform', bias_initializer='zeros',
@@ -36,6 +40,8 @@ class NeuralNetwork(object):
                                         moving_mean_initializer='zeros', moving_variance_initializer='ones',
                                         beta_regularizer=None, gamma_regularizer=None, beta_constraint=None,
                                         gamma_constraint=None)
+
+        # -- Third -- #
         self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='valid', data_format=None,
                                            dilation_rate=(1, 1), activation=None, use_bias=True,
                                            kernel_initializer='glorot_uniform', bias_initializer='zeros',

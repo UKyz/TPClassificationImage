@@ -1,6 +1,7 @@
 import numpy as np
 from tensorflow.keras.datasets import cifar10
 
+
 class DataManager(object):
 
     def __init__(self):
