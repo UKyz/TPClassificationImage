@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 import cv2
 import numpy as np
-
+from tensorflow.python.keras import Sequential
 
 class NeuralNetwork(object):
 
@@ -15,39 +15,21 @@ class NeuralNetwork(object):
            and https://code.google.com/archive/p/cuda-convnet/wikis/LayerParams.wiki 
            for documentation on the layer format.
         """
-        # -- First -- #
-        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='valid',
-                                           input_shape=(128, 128, 3), data_format="channels_last", dilation_rate=(1, 1),
-                                           activation=None, use_bias=True, kernel_initializer='glorot_uniform',
-                                           bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None,
-                                           activity_regularizer=None, kernel_constraint=None, bias_constraint=None))
-        self.model.add(keras.layers.MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding='valid', data_format=None))
-        keras.layers.BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001, center=True, scale=True,
-                                        beta_initializer='zeros', gamma_initializer='ones',
-                                        moving_mean_initializer='zeros', moving_variance_initializer='ones',
-                                        beta_regularizer=None, gamma_regularizer=None, beta_constraint=None,
-                                        gamma_constraint=None)
-
-        # -- Second -- #
-        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='valid', data_format=None,
-                                           dilation_rate=(1, 1), activation=None, use_bias=True,
-                                           kernel_initializer='glorot_uniform', bias_initializer='zeros',
-                                           kernel_regularizer=None, bias_regularizer=None,
-                                           activity_regularizer=None, kernel_constraint=None, bias_constraint=None))
-        self.model.add(keras.layers.MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding='valid', data_format=None))
-        keras.layers.BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001, center=True, scale=True,
-                                        beta_initializer='zeros', gamma_initializer='ones',
-                                        moving_mean_initializer='zeros', moving_variance_initializer='ones',
-                                        beta_regularizer=None, gamma_regularizer=None, beta_constraint=None,
-                                        gamma_constraint=None)
-
-        # -- Third -- #
-        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='valid', data_format=None,
-                                           dilation_rate=(1, 1), activation=None, use_bias=True,
-                                           kernel_initializer='glorot_uniform', bias_initializer='zeros',
-                                           kernel_regularizer=None, bias_regularizer=None,
-                                           activity_regularizer=None, kernel_constraint=None, bias_constraint=None))
-        self.model.add(keras.layers.MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding='valid', data_format=None))
+        self.model = Sequential()
+        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='same',
+                                           input_shape=(32, 32, 3), data_format="channels_last", dilation_rate=(1, 1),
+                                           activation=tf.nn.relu))
+        self.model.add(keras.layers.MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding='same'))
+        self.model.add(keras.layers.BatchNormalization(axis=1, momentum=0.99, epsilon=0.001, ))
+        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='same',
+                                           dilation_rate=(1, 1), activation=tf.nn.relu))
+        self.model.add(keras.layers.AveragePooling2D(pool_size=(3, 3), strides=(2, 2), padding='same'))
+        self.model.add(keras.layers.BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001))
+        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='same',
+                                           dilation_rate=(1, 1), activation=tf.nn.relu))
+        self.model.add(keras.layers.AveragePooling2D(pool_size=(3, 3), strides=(2, 2), padding='same'))
+        self.model.add(keras.layers.Flatten())
+        self.model.add(keras.layers.Dense(10, activation=tf.nn.softmax))
 
     def train(self, train_data, train_labels, epochs):
         """Train the keras model

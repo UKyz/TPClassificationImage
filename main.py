@@ -3,6 +3,10 @@ from src.NeuralNetwork_td import NeuralNetwork
 import numpy as np
 
 def main():
+    a = DataManager()
+    a.loadData()
+    b = NeuralNetwork()
+    b.createModel()
     pass
 
 if __name__ == "__main__":
