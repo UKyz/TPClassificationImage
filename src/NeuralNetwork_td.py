@@ -2,18 +2,34 @@ import tensorflow as tf
 from tensorflow import keras
 import cv2
 import numpy as np
+from tensorflow.python.keras import Sequential
 
 class NeuralNetwork(object):
 
     def __init__(self):
         self.model = None
-    
+
     def createModel(self):
         """Create and compile the keras model. See layers-18pct.cfg and 
            layers-params-18pct.cfg for the network model, 
            and https://code.google.com/archive/p/cuda-convnet/wikis/LayerParams.wiki 
            for documentation on the layer format.
         """
+        self.model = Sequential()
+        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='same',
+                                           input_shape=(32, 32, 3), data_format="channels_last", dilation_rate=(1, 1),
+                                           activation=tf.nn.relu))
+        self.model.add(keras.layers.MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding='same'))
+        self.model.add(keras.layers.BatchNormalization(axis=1, momentum=0.99, epsilon=0.001, ))
+        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='same',
+                                           dilation_rate=(1, 1), activation=tf.nn.relu))
+        self.model.add(keras.layers.AveragePooling2D(pool_size=(3, 3), strides=(2, 2), padding='same'))
+        self.model.add(keras.layers.BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001))
+        self.model.add(keras.layers.Conv2D(filters=32, kernel_size=5, strides=(1, 1), padding='same',
+                                           dilation_rate=(1, 1), activation=tf.nn.relu))
+        self.model.add(keras.layers.AveragePooling2D(pool_size=(3, 3), strides=(2, 2), padding='same'))
+        self.model.add(keras.layers.Flatten())
+        self.model.add(keras.layers.Dense(10, activation=tf.nn.softmax))
 
     def train(self, train_data, train_labels, epochs):
         """Train the keras model
