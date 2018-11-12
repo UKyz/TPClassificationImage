@@ -31,6 +31,10 @@ class NeuralNetwork(object):
         self.model.add(keras.layers.Flatten())
         self.model.add(keras.layers.Dense(10, activation=tf.nn.softmax))
 
+        self.model.compile(optimizer=keras.optimizers.Adam(),
+                           loss='sparse_categorical_crossentropy',
+                           metrics=['accuracy'])
+
     def train(self, train_data, train_labels, epochs):
         """Train the keras model
         
