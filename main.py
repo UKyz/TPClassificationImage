@@ -7,6 +7,10 @@ def main():
     a.loadData()
     b = NeuralNetwork()
     b.createModel()
+
+    b.train(a.train_data, a.train_labels, epochs=100)
+    b.saveModel()
+
     pass
 
 if __name__ == "__main__":
