@@ -8,7 +8,7 @@ def main():
     b = NeuralNetwork()
     b.createModel()
 
-    b.train(a.train_data, a.train_labels, epochs=6)
+    b.train(a.train_data, a.train_labels, epochs=100)
     res = b.evaluate(a.eval_data, a.eval_labels)
     print("Accuracy : {}".format(res))
     # b.saveModel()
